@@ -1,8 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import { useHome } from "./hooks/useHome";
+import logo from "./logo.svg";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+const LoginPage = React.lazy(() => import("./pages/auth/login/index"));
 
 function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path={`/`} element={<HomePage />} />
+      </Routes>
+    </Router>
+  );
+}
+
+const HomePage = () => {
+  const { onGetUsers, users } = useHome();
+  console.log(users);
+
+  useEffect(() => {
+    onGetUsers();
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
@@ -21,6 +41,6 @@ function App() {
       </header>
     </div>
   );
-}
+};
 
 export default App;

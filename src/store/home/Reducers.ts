@@ -1,13 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IHomeState } from "../../types/app";
-import { IActReducerwithCB } from "../../types/hook";
+import { IDataStore } from "../../types/app";
 
 const homeSlice = createSlice({
   name: "home",
   initialState: {
     loading: false,
     error: null,
-  } as IHomeState,
+  } as IDataStore,
   reducers: {
     actionRequest: (state) => {
       return {
@@ -16,7 +15,7 @@ const homeSlice = createSlice({
         loading: true,
       };
     },
-    getDataSuccess: (state, { payload }: { payload: Partial<IHomeState> }) => {
+    getDataSuccess: (state, { payload }: { payload: Partial<IDataStore> }) => {
       return {
         ...state,
         ...payload,
@@ -26,24 +25,15 @@ const homeSlice = createSlice({
     },
     requestDataStore: (
       state,
-      { payload }: { payload: Partial<IHomeState> }
+      { payload }: { payload: Partial<IDataStore> }
     ) => ({
       ...state,
       ...payload,
     }),
-    requestDataWithcb: (state, { payload }: IActReducerwithCB) => {
-      return payload?.callback?.({ ...state }, (newState) => {
-        return { ...newState };
-      });
-    },
   },
 });
 
-export const {
-  actionRequest,
-  getDataSuccess,
-  requestDataStore,
-  requestDataWithcb,
-} = homeSlice.actions;
+export const { actionRequest, getDataSuccess, requestDataStore } =
+  homeSlice.actions;
 
 export default homeSlice.reducer;

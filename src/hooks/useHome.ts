@@ -18,7 +18,7 @@ export const useHome = () => {
         { formData: GET_MENU_BY_MODULE, dataKey: "users" },
         (result) => {
           // result.data[0].children = [...result.data[0].children];
-          dispatch(getDataSuccess({ users: result }));
+          dispatch(getDataSuccess({ data: result }));
         }
       )
     );

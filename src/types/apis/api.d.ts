@@ -1,16 +1,16 @@
 /** @format */
 
-import { IHomeState } from "../app";
+import { IDataStore } from "../app";
 import { IParamsRequest, IResponse } from "../user";
 
-export type ICallback = (results: IResponse["result"]) => void;
+export type ICallback = (results: IResponse) => void;
 
-export interface IPayloadHome {
+export interface IPayload {
   formData: IParamsRequest;
-  dataKey?: keyof IHomeState;
+  dataKey?: string;
 }
 
-export interface IHomeActionPayload {
-  payload: IPayloadHome;
+export interface IActionPayload {
+  payload: IPayload;
   callback?: ICallback;
 }

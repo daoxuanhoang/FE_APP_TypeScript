@@ -1,4 +1,4 @@
-import { IHomeActionPayload } from "../../types/apis/api";
+import { IActionPayload } from "../../types/apis/api";
 
 export const HomeActions = {
   // base get method
@@ -6,8 +6,8 @@ export const HomeActions = {
 };
 
 export const getBaseActionsRequest = (
-  payload: IHomeActionPayload["payload"],
-  callback?: IHomeActionPayload["callback"]
+  payload: IActionPayload["payload"],
+  callback?: IActionPayload["callback"]
 ) => ({
   payload,
   type: HomeActions.HOME_GET_BASE_ACTIONS,

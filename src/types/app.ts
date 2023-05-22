@@ -1,4 +1,5 @@
 import { EnumNotificationType } from "../utils/constants";
+import { IUser } from "./user";
 
 export interface IKeyAuth {
   authToken: string;
@@ -6,16 +7,17 @@ export interface IKeyAuth {
   updateParent?: boolean;
 }
 
-export type IDataStore<T> = {
-  isLoading?: boolean;
-  data?: T;
-  error?: string | null;
-};
+export interface IAppState {
+  loading: boolean;
+  language: string;
+  data?: IUser;
+  accessToken?: string;
+}
 
-export interface IHomeState {
-  loading?: boolean;
+export interface IDataStore {
+  isLoading?: boolean;
+  data?: any;
   error?: string | null;
-  users?: any;
 }
 
 export interface INofifyState {

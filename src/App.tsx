@@ -2,11 +2,13 @@ import React, { useEffect } from "react";
 import { useHome } from "./hooks/useHome";
 import logo from "./logo.svg";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+const LoginPage = React.lazy(() => import("./pages/auth/login/index"));
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/login" element={<LoginPage />} />
         <Route path={`/`} element={<HomePage />} />
       </Routes>
     </Router>

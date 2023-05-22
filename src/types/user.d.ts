@@ -1,18 +1,27 @@
+export interface IUser {
+  id: string;
+  name: string;
+  avatar: string;
+  birthday: date;
+  email: string;
+  phone: number;
+  gender: number;
+  status: number;
+}
+
 export interface IParamsRequest {
   action: string;
   data: any;
 }
-
-export interface IRSResult {
-  status: boolean;
-  message: string;
-  title: string;
+export interface IResponse {
   data: any;
+  total: number;
+  page: number;
+  perPage: number;
 }
 
-export interface IResponse {
-  action: string;
-  status: number;
+export interface IResponseUser {
+  accessToken: string;
   data: any;
-  // result: IRSResult;
+  status: boolean;
 }

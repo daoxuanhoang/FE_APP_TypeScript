@@ -1,38 +1,39 @@
 import { useCallback } from "react";
-import { useDispatch } from "react-redux";
-import { IDataStore } from "../types/app";
-import { getBaseActionsRequest } from "../store/home";
-import { GET_MENU_BY_MODULE } from "../services/actionHomeParam";
-import { IParamsRequest } from "../types/user";
-import { loginRequest } from "../store/user";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  UserSelectors,
+  loginActionsRequest,
+  loginSuccess,
+} from "../store/user";
+import { useKey } from "./useKey";
 
 export function useUser() {
   const dispatch = useDispatch();
+  const { setKeyUser } = useKey();
+  const user = useSelector(UserSelectors.getAuthUser);
+
   const onLogin = useCallback(
     (params: any) => {
-      const { email, password } = params;
-      const formData = {
-        email,
-        password,
-      };
-      dispatch(
-        loginRequest(formData, (res) => {
-          console.log(res);
-        })
-        // getBaseActionsRequest(
-        //   { formData: GET_MENU_BY_MODULE, dataKey: "users" },
-        //   (result) => {
-        //     console.log("sd", result);
-
-        //     // result.data[0].children = [...result.data[0].children];
-        //     // dispatch(getDataSuccess({ data: result }));
-        //   }
-        // )
-      );
+      try {
+        const { email, password } = params;
+        dispatch(
+          loginActionsRequest({ email, password }, (result) => {
+            if (result.status) {
+              setKeyUser(result.data, result.accessToken);
+              dispatch(loginSuccess(result.data));
+              window.location.replace("/");
+            }
+          })
+        );
+      } catch (error) {
+        console.log(error);
+      }
     },
     [dispatch]
   );
+
   return {
     onLogin,
+    user,
   };
 }

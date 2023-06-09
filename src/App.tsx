@@ -2,22 +2,30 @@ import React, { useEffect } from "react";
 import { useHome } from "./hooks/useHome";
 import logo from "./logo.svg";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { getCookie } from "cookies-next";
+import { ActivityIndicator } from "./components/ActivityIndicator";
 const LoginPage = React.lazy(() => import("./pages/auth/login/index"));
 
 function App() {
+  // const user = JSON.parse(getCookie("user") as string);
+
+  const loading = () => (
+    <ActivityIndicator color="#fff" containerStyle={{ minHeight: 800 }} />
+  );
   return (
     <Router>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path={`/`} element={<HomePage />} />
-      </Routes>
+      <React.Suspense fallback={loading()}>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path={`/`} element={<HomePage />} />
+        </Routes>
+      </React.Suspense>
     </Router>
   );
 }
 
 const HomePage = () => {
   const { onGetUsers, users } = useHome();
-  console.log(users);
 
   useEffect(() => {
     onGetUsers();

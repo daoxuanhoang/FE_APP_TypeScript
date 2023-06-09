@@ -1,31 +1,33 @@
+import axios from "axios";
 import { IKeyAuth } from "../types/app";
+import { IUser } from "../types/user";
 import { KEY_CONTEXT } from "../utils/constants";
+import { encryptRSA } from "../utils/libs";
+import { getCookie, setCookies } from "cookies-next";
 
 export const useKey = () => {
   const HCode = window?.["HCode"];
-
-  const setKeySite = ({
-    authToken,
-    refreshToken,
-    updateParent = false,
-  }: IKeyAuth) => {
-    if (updateParent) {
-      HCode.setValue(KEY_CONTEXT.REFRESH_TOKEN, refreshToken);
-      HCode.setValue(KEY_CONTEXT.AUTH_TOKEN, authToken);
-    }
-    localStorage.setItem(KEY_CONTEXT.AUTH_TOKEN, authToken);
-    localStorage.setItem(KEY_CONTEXT.REFRESH_TOKEN, refreshToken);
+  const setKeyUser = (user: IUser, accessToken: string) => {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    // if (process.env.NODE_ENV === 'development') {
+    setCookies("accessToken", accessToken, {
+      maxAge: 36000 * 24 * 30,
+      httpOnly: false,
+      secure: false,
+    });
+    setCookies("user", JSON.stringify(user));
+    // }
   };
 
   // custom get value
   const getKey = (key: string) => {
     return key === KEY_CONTEXT.THEME_MODE
-      ? localStorage.getItem(key) || "main"
-      : localStorage.getItem(key);
+      ? getCookie(key) || "main"
+      : getCookie(key);
   };
 
   return {
-    setKeySite,
     getKey,
+    setKeyUser,
   };
 };

@@ -19,7 +19,8 @@ const userSlice = createSlice({
       return {
         ...state,
         loading: false,
-        error: payload,
+        data: payload,
+        error: null,
       };
     },
     loginFailure: (state, { payload }: any) => {

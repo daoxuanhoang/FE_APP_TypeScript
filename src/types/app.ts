@@ -1,4 +1,4 @@
-import { EnumNotificationType } from "../utils/constants";
+import { EnumNotificationType, EnumValueType } from "../utils/constants";
 import { IUser } from "./user";
 
 export interface IKeyAuth {
@@ -32,3 +32,5 @@ export interface INofifyState {
     useI18n: boolean;
   };
 }
+
+export type IValueType = keyof typeof EnumValueType;

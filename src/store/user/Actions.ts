@@ -1,16 +1,25 @@
-export const UserActions = {
-  LOGIN_REQUEST: "LOGIN_REQUEST",
-  LOGIN_SUCCESS: "LOGIN_SUCCESS",
-  LOGIN_FAILURE: "LOGIN_FAILURE",
-  LOGOUT: "LOGOUT",
-  CHANGE_LANGUAGE: "CHANGE_LANGUAGE",
-  FORGOT_PASSWORD: "FORGOT_PASSWORD",
-  FORGOT_PASSWORD_SCODE: "FORGOT_PASSWORD_SCODE",
-  FORGOT_PASSWORD_SPASSWORD: "FORGOT_PASSWORD_SPASSWORD",
+import { IActionPayload } from "../../types/apis/api";
+
+export const CustomersActions = {
+  // base get method
+  GET_CUSTOMER_ACTIONS: "GET_CUSTOMER_ACTIONS",
+  LOGIN_REQUEST_ACTION: "LOGIN_REQUEST_ACTION",
 };
 
-export const loginRequest = (formdata: any, callback?: (t: any) => void) => ({
-  formdata,
-  type: UserActions.LOGIN_REQUEST,
+export const getCustomerActionsRequest = (
+  payload: IActionPayload["payload"],
+  callback?: IActionPayload["callback"]
+) => ({
+  payload,
+  type: CustomersActions.GET_CUSTOMER_ACTIONS,
+  callback,
+});
+
+export const loginActionsRequest = (
+  formData: any,
+  callback?: (t: any) => void
+) => ({
+  formData,
+  type: CustomersActions.LOGIN_REQUEST_ACTION,
   callback,
 });

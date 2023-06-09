@@ -1,4 +1,4 @@
-import { takeEvery, put, all } from "redux-saga/effects";
+import { takeEvery, put, all, select } from "redux-saga/effects";
 import { HomeActions } from "./Actions";
 import { IActionPayload } from "../../types/apis/api";
 import { actionRequest, getDataSuccess } from "./Reducers";

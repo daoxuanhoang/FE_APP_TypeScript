@@ -1,37 +1,69 @@
-import { put, takeEvery } from "redux-saga/effects";
-import { IResponseUser } from "../../types/user";
+import { takeEvery, put, all, select } from "redux-saga/effects";
+import { CustomersActions } from "./Actions";
+import { IActionPayload } from "../../types/apis/api";
+// import { actionRequest, getDataSuccess } from "./Reducers";
+import { IResponse, IResponseUser, IUser } from "../../types/user";
 import axiosClient from "../../utils/axios";
-import axios, { all } from "axios";
-import { actionRequest, loginSuccess } from "./Reducers";
-import { UserActions } from "./Actions";
+import axios from "axios";
+import { INofifyState } from "../../types/app";
+import { error, success } from "../notify";
+import { actionRequest, loginFailure, loginSuccess } from "./Reducers";
+import { push } from "connected-react-router";
 
-function* loginRequest(action: any) {
-  console.log(action);
+function* onGetCustomerActionsRequest(action: IActionPayload) {
   try {
-    put(actionRequest());
-    const res: IResponseUser = yield axiosClient.post(
-      `${`${process.env.REACT_APP_URL}/login`}`,
-      JSON.stringify(action)
-    );
     // yield put(actionRequest());
-    // const res: any = yield axios({
-    //   method: "post",
-    //   url: `${process.env.REACT_APP_URL}/login`,
-    //   data: action,
-    // }).then((res) => res.data);
-    console.log(res);
-    // yield put(loginSuccess({ user: res }));
-    return action.callback?.(res);
-    //   if(result)
-  } catch (error) {
-    console.log(error);
+    const res: IResponse = yield axiosClient.get(
+      `${`${process.env.REACT_APP_URL}/users?page=1&perPage=10`}`
+    );
+    // Case passing datakey set data at here and dint callback
+    // if (action.payload.dataKey)
+    //   yield put(getDataSuccess({ [action.payload.dataKey]: res }));
+    return action?.callback?.(res);
+  } catch (e) {
+    console.log(e);
+    yield put(
+      error({
+        message: "text.some_thing_wrong",
+        options: { useI18n: true },
+      } as INofifyState)
+    );
   }
 }
 
-function* watchLogin() {
-  yield takeEvery(UserActions.LOGIN_REQUEST, loginRequest);
+function* onLoginActionRequest(action: any) {
+  try {
+    yield put(actionRequest());
+    const res: IResponseUser = yield axiosClient.post(
+      `${`${process.env.REACT_APP_URL}/login`}`,
+      JSON.stringify(action.formData)
+    );
+    if (res?.status) {
+      const user: any = res.data;
+      yield put(loginSuccess(user));
+      yield put(push("/"));
+
+      return action.callback?.(res);
+    } else {
+      yield put(error({ message: "error" } as INofifyState));
+    }
+  } catch (e) {
+    yield put(error({ message: e } as INofifyState));
+    console.log(e);
+  }
 }
 
-export default function* userSagas() {
-  yield all([watchLogin()]);
+function* watchGetCustomerActions() {
+  yield takeEvery(
+    CustomersActions.GET_CUSTOMER_ACTIONS as any,
+    onGetCustomerActionsRequest
+  );
+}
+
+function* watchLoginAction() {
+  yield takeEvery(CustomersActions.LOGIN_REQUEST_ACTION, onLoginActionRequest);
+}
+
+export default function* homeSagas() {
+  yield all([watchGetCustomerActions(), watchLoginAction()]);
 }

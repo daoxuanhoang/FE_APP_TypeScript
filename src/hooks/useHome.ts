@@ -4,8 +4,12 @@ import {
   getBaseActionsRequest,
   getDataSuccess,
 } from "../store/home";
-import { GET_MENU_BY_MODULE } from "../services/actionHomeParam";
+import {
+  GET_CUSTOMER_ACTIONS,
+  GET_MENU_BY_MODULE,
+} from "../services/actionHomeParam";
 import { useDispatch, useSelector } from "react-redux";
+import { getCustomerActionsRequest } from "../store/user";
 
 export const useHome = () => {
   const dispatch = useDispatch();
@@ -17,8 +21,17 @@ export const useHome = () => {
       getBaseActionsRequest(
         { formData: GET_MENU_BY_MODULE, dataKey: "users" },
         (result) => {
-          // result.data[0].children = [...result.data[0].children];
           dispatch(getDataSuccess({ data: result }));
+        }
+      )
+    );
+  }, [dispatch]);
+  const onGetCustomers = useCallback(() => {
+    dispatch(
+      getCustomerActionsRequest(
+        { formData: GET_CUSTOMER_ACTIONS, dataKey: "customers" },
+        (result) => {
+          // console.log("dss", result);
         }
       )
     );
@@ -26,7 +39,7 @@ export const useHome = () => {
 
   return {
     onGetUsers,
-
+    onGetCustomers,
     users,
   };
 };
